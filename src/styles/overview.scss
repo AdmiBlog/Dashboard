@@ -1,0 +1,40 @@
+#logout-button{
+    display: block;
+}
+#overview-counts{
+    display: flex;
+    flex-wrap: wrap;
+    max-width: 900px;
+    .overview-count{
+        display: flex;
+        padding: 20px;
+        background: #e5e5e5b0;
+        border-radius: 10px;
+        margin: 10px;
+        align-items: center;
+        min-width: 150px;
+        flex:1;
+        &-title{
+            font-size: 24px;
+            margin-right: 10px;
+            font-weight: 800;
+            margin-left:10px;
+            font-family: "PingFang SC";
+        }
+        &-value{
+            font-size: 18px;
+            flex-grow: 1;
+            text-align: right;
+        }
+        [data-theme="dark"]{
+            background-color: rgb(83 83 83 / 69%);
+        }
+        
+    }
+    .overview-count:hover{
+            background: #d4d4d4b0;
+            [data-theme="dark"]{
+                background-color: rgb(103 103 103 / 69%);
+            }
+    }
+}
