@@ -20,11 +20,15 @@ import {
   ArchiveRegular,
   LinkRegular,
   DocumentRegular,
+  CommentRegular,
+  HeadphonesSoundWaveRegular,
   ImageRegular,
   SettingsRegular,
-  ArrowExitRegular,
   ChartMultipleRegular,
   ChatRegular,
+  CollectionsEmptyRegular,
+  LayoutRowTwoSplitTopFocusTopLeftFilled,
+  TimelineRegular,
 } from "@fluentui/react-icons";
 import NoSSR from "@/components/NoSSR";
 import "@/styles/admin.scss";
@@ -38,32 +42,32 @@ declare interface TabItem{
 }
 const tabs:TabItem[]=[
   {
-    name: "概览",
+    name: "博客概览",
     link: "/main/overview",
     icon: <ChartMultipleRegular/>
   },
   {
-    name: "文章",
+    name: "文章管理",
     link: "/main/posts",
     icon: <DocumentRegular/>
   },
   {
-    name: "草稿",
+    name: "草稿箱",
     link: "/main/drafts",
     icon: <ArchiveRegular/>
   },
   {
-    name: "说说",
+    name: "说说管理",
     link: "/main/speaks",
     icon: <ChatRegular/>
   },
-  // {
-  //   name: "评论",
-  //   link: "/main/comments",
-  //   icon: <CommentRegular/>
-  // },
   {
-    name: "友链",
+    name: "最近评论",
+    link: "/main/comments",
+    icon: <CommentRegular/>
+  },
+  {
+    name: "友链管理",
     link: "/main/flinks",
     icon: <LinkRegular/>
   },
@@ -71,6 +75,26 @@ const tabs:TabItem[]=[
     name: "图床",
     link: "/main/images",
     icon: <ImageRegular/>
+  },
+  {
+    name: "网址收藏",
+    link: "/main/nav",
+    icon: <CollectionsEmptyRegular/>
+  },
+  {
+    name: "音乐管理",
+    link: "/main/music",
+    icon: <HeadphonesSoundWaveRegular/>
+  },
+  {
+    name: "左上角",
+    link: "/main/topleft",
+    icon: <LayoutRowTwoSplitTopFocusTopLeftFilled/>
+  },
+  {
+    name: "时间线",
+    link: "/main/timeline",
+    icon: <TimelineRegular/>
   },
   {
     name: "设置",
