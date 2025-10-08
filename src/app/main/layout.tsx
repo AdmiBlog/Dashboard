@@ -29,6 +29,7 @@ import {
   CollectionsEmptyRegular,
   LayoutRowTwoSplitTopFocusTopLeftFilled,
   TimelineRegular,
+  ChartPersonRegular,
 } from "@fluentui/react-icons";
 import NoSSR from "@/components/NoSSR";
 import "@/styles/admin.scss";
@@ -95,6 +96,11 @@ const tabs:TabItem[]=[
     name: "时间线",
     link: "/main/timeline",
     icon: <TimelineRegular/>
+  },
+  {
+    name: "关于页",
+    link: "/main/about",
+    icon: <ChartPersonRegular />
   },
   {
     name: "设置",
