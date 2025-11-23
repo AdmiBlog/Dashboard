@@ -88,8 +88,8 @@ const tabs:TabItem[]=[
     icon: <HeadphonesSoundWaveRegular/>
   },
   {
-    name: "左上角",
-    link: "/main/topleft",
+    name: "小链接",
+    link: "/main/littlelinks",
     icon: <LayoutRowTwoSplitTopFocusTopLeftFilled/>
   },
   {
