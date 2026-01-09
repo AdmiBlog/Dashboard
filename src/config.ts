@@ -2,14 +2,14 @@ import type { BrandVariants, Theme } from '@fluentui/react-components';
 declare interface Config{
     title: string,
     backEndUrl: string,
-    frontEndUrl: string,
+    blogUrl: string,
     falldownAvatar: string,
     colorTheme: BrandVariants,
 }
 export const config:Config={
     title: "Admibrill的博客",
-    backEndUrl: "https://blogend.qyadbr.top",
-    frontEndUrl: "https://blog.qyadbr.top",
+    backEndUrl: "http://127.0.0.1:2333",
+    blogUrl: "http://localhost:3000",
     falldownAvatar: "https://img.0v0.my/2024/09/06/66dabf7f748c8.jpg",
     colorTheme:{ 
       10: "#020305",

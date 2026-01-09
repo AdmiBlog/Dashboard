@@ -38,3 +38,28 @@
             }
     }
 }
+
+.misc-edit{
+    &-open{
+        display: block;
+    }
+    &-close{
+        display: none;
+    }
+    
+    &-bar{
+        display: flex;
+        right: 0px;
+        justify-content: space-between;
+        &-title{
+            display: flex;
+        }
+        &-button{
+            padding: 10px;
+            display: flex;
+        }
+    }
+    &-button-save{
+        display: block;
+    }
+}
