@@ -8,8 +8,8 @@ declare interface Config{
 }
 export const config:Config={
     title: "Admibrill的博客",
-    backEndUrl: "http://127.0.0.1:2333",
-    blogUrl: "http://localhost:3000",
+    backEndUrl: "http://blogend.qyadbr.top",
+    blogUrl: "http://blog.qyadbr.top",
     falldownAvatar: "https://img.0v0.my/2024/09/06/66dabf7f748c8.jpg",
     colorTheme:{ 
       10: "#020305",
