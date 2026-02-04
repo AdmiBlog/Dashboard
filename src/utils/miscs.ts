@@ -86,3 +86,38 @@ export async function updateLicense(content: string):Promise<boolean>{
         return false;
     }
 }
+
+export async function updateAbout(content: string):Promise<boolean>{
+    try{
+        const res=await fetch(`${config.backEndUrl}/update/miscs/about`, {
+            method: 'PUT',
+            headers:getHeader(),
+            body: JSON.stringify({
+                content:content
+            })
+        });
+        refreshMiscsCache();
+        if(res.ok) return true;
+        else return false;
+    }
+    catch(err){
+        return false;
+    }
+}
+export async function updateFlinkAnno(content: string):Promise<boolean>{
+    try{
+        const res=await fetch(`${config.backEndUrl}/update/miscs/flinkAnno`, {
+            method: 'PUT',
+            headers:getHeader(),
+            body: JSON.stringify({
+                content:content
+            })
+        });
+        refreshMiscsCache();
+        if(res.ok) return true;
+        else return false;
+    }
+    catch(err){
+        return false;
+    }
+}
