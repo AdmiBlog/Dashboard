@@ -41,6 +41,8 @@ import { BaseDialog } from "@/components/Dialog";
 import Messages, { MessagesRef } from "@/components/Messages";
 import "@/styles/flinks.scss";
 import stringRandom from "string-random";
+import Vditor from "@/components/Vditor";
+import { updateFlinkAnno } from "@/utils/miscs";
 function isValidUrl(url: string) {
   return /^https?:\/\/.+/i.test(url);
 }
@@ -95,7 +97,10 @@ export default function Flinks() {
     linkIdx: number;
   } | null>(null);
   const [urlEditValue, setUrlEditValue] = useState("");
-
+  const [flinkAnnoContent,setFlinkAnnoContent]=useState<string>("加载中...");
+  const flinEditRef = useRef<{ getMarkdown: () => string }>(null);
+  const [flinSaving,setFlinSaving] =useState<boolean>(false);
+  const flinButtonRef = useRef<HTMLButtonElement>(null);
   useEffect(() => {
     (async () => {
       // 拉取后排序
@@ -115,7 +120,13 @@ export default function Flinks() {
     avatarEditing,
     urlEditing,
   ]);
-
+  useEffect(()=>{(async ()=>{
+    fetch(`${config.backEndUrl}/get/miscs/flinkAnno`)
+    .then(async res=>{
+        if(res.ok)
+        setFlinkAnnoContent((await res.json()).data);
+    })
+  })()},[]);
   const handleEdit = (groupIdx: number, linkIdx: number, name: string) => {
     setNameEditing({ groupIdx, linkIdx });
     setNameEditValue(name);
@@ -1214,6 +1225,33 @@ export default function Flinks() {
               </div>
             </div>
           ))}
+      </div>
+      <Messages ref={messageBarRef}/>
+      <h1>编辑关于页</h1>
+      <div className="misc-edit-main" >
+        <Vditor content={flinkAnnoContent} ref={flinEditRef} />
+      </div>
+      <div className="misc-edit-button-save">
+        <Button 
+          appearance="primary"
+          ref={flinButtonRef}
+          disabled={flinSaving}
+          onClick={async ()=>{
+            setFlinSaving(true);
+            if( await updateFlinkAnno(flinEditRef.current?.getMarkdown()!)){
+              messageBarRef.current?.addMessage(
+                "提示",
+                "保存成功",
+                "success"
+              );
+            }else{
+              messageBarRef.current?.addMessage("提示", "保存失败", "error");
+            }
+            setFlinSaving(false);
+          }}
+        >
+          {flinSaving ? "保存中..." : "保存"}
+        </Button>
       </div>
       <Messages ref={messageBarRef} />
     </>

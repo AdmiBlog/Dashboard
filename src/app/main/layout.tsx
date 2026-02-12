@@ -88,11 +88,6 @@ const tabs:TabItem[]=[
     icon: <HeadphonesSoundWaveRegular/>
   },
   {
-    name: "小链接",
-    link: "/main/littlelinks",
-    icon: <LayoutRowTwoSplitTopFocusTopLeftFilled/>
-  },
-  {
     name: "时间线",
     link: "/main/timeline",
     icon: <TimelineRegular/>

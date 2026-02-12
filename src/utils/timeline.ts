@@ -1,5 +1,5 @@
 import { config } from "@/config";
-import { BB } from "@/interfaces/bb";
+import { BB, updateBB } from "@/interfaces/bb";
 
 export async function refreshTimelinesCache(){
     try{await fetch(`${config.blogUrl}/refreshCache/timeline`);}
@@ -44,7 +44,7 @@ export async function removeTimelines(time:number):Promise<boolean>{
     catch(e){}
     return false;
 }
-export async function updateTimelines(timeline:BB):Promise<boolean>{
+export async function updateTimelines(timeline:updateBB):Promise<boolean>{
     try{
         const res=await fetch(`${config.backEndUrl}/update/timeline/updateTimeline`,{
             method:"PUT",

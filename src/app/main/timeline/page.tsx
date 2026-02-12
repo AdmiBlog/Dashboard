@@ -1,6 +1,7 @@
 "use client";
 import { addTimelines, getTimelineCount, getTimelines, removeTimelines, updateTimelines } from "@/utils/timeline";
 import { Button, Label } from "@fluentui/react-components";
+import { DatePicker } from "@fluentui/react-datepicker-compat";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { ReactElement, RefObject, useEffect, useRef, useState } from "react";
@@ -15,13 +16,14 @@ import mime from "mime";
 import { uploadImage } from "@/utils/image";
 import React from "react";
 const imageTypes=["image/png","image/jpeg","image/gif","image/webp","image/jpg"];
-function BBItem({item,deleteHandler,saveHandler,pasteHandler,uploadWithTip,updated}:{item:BB,deleteHandler:()=>void,saveHandler:(content:string)=>void,pasteHandler:(editorRef:RefObject<AceEditor>,event:ClipboardEvent)=>void,uploadWithTip:(file:File)=>Promise<string>,updated:number}):ReactElement{
+function BBItem({item,deleteHandler,saveHandler,pasteHandler,uploadWithTip,updated}:{item:BB,deleteHandler:()=>void,saveHandler:(content:string,newTime:number)=>void,pasteHandler:(editorRef:RefObject<AceEditor>,event:ClipboardEvent)=>void,uploadWithTip:(file:File)=>Promise<string>,updated:number}):ReactElement{
   const [editing,setEditing]=useState(false);
   const [saveEnable,setSaveEnable]=useState(false);
   const aceEditorRef=useRef<AceEditor>(null);
   const saveButtonRef=useRef<HTMLButtonElement>(null);
   const handlePaste=(e:ClipboardEvent)=>{pasteHandler(aceEditorRef,e)};
-  const uploadImageInputRef=useRef<HTMLInputElement>(null);
+  const timeDatePickerRef=useRef<HTMLInputElement>(null);
+  const uploadInputRef=useRef<HTMLInputElement>(null);
   const [isLight,setIsLight]=useState(true);
   useEffect(()=>{
     const mediaQuery=window.matchMedia("(prefers-color-scheme:light)");
@@ -69,7 +71,7 @@ function BBItem({item,deleteHandler,saveHandler,pasteHandler,uploadWithTip,updat
             onClick={()=>{
               const content=aceEditorRef.current?.editor.getValue();
               setEditing(false);
-              saveHandler(content!);
+              saveHandler(content!,new Date(timeDatePickerRef.current?.value!).valueOf()/1000);
             }}
             ref={saveButtonRef}
           />
@@ -89,7 +91,7 @@ function BBItem({item,deleteHandler,saveHandler,pasteHandler,uploadWithTip,updat
             type="file"
             accept={imageTypes.join(",")}
             style={{display:"none"}}
-            ref={uploadImageInputRef}
+            ref={uploadInputRef}
             onChange={async (e)=>{
               const file=e.target.files?.[0];
               if(!file) return;
@@ -103,7 +105,7 @@ function BBItem({item,deleteHandler,saveHandler,pasteHandler,uploadWithTip,updat
             icon={<ImageRegular/>}
             size="small"
             onClick={()=>{
-              uploadImageInputRef.current?.click();
+              uploadInputRef.current?.click();
             }}
             title="上传图片"
           />
@@ -224,18 +226,27 @@ function BBItem({item,deleteHandler,saveHandler,pasteHandler,uploadWithTip,updat
         dangerouslySetInnerHTML={{__html:item.content}}
         style={{display:editing?"none":"block"}}
       />
-      <div className="times-item-time">{moment.unix(item.time).format("YYYY-MM-DD HH:mm:ss")}</div>
+      { editing? 
+        <DatePicker 
+          ref={timeDatePickerRef} 
+          onSelectDate={(date)=>{
+            setSaveEnable(!(date==new Date(item.time*1000)));
+          }}
+        />:
+      <div className="times-item-time" >{moment.unix(item.time).format("YYYY-MM-DD")}</div>
+      }
     </div>
   );
 }
-function NewBBItem({item,saveHandler,pasteHandler,uploadWithTip}:{item:BB,saveHandler:(content:string)=>void,pasteHandler:(editorRef:RefObject<AceEditor>,event:ClipboardEvent)=>void,uploadWithTip:(file:File)=>Promise<string>}){
+function NewBBItem({item,saveHandler,pasteHandler,uploadWithTip}:{item:BB,saveHandler:(content:string,newTime:number)=>void,pasteHandler:(editorRef:RefObject<AceEditor>,event:ClipboardEvent)=>void,uploadWithTip:(file:File)=>Promise<string>}){
   const [editing,setEditing]=useState(true);
   const [saveEnable,setSaveEnable]=useState(false);
   const aceEditorRef=useRef<AceEditor>(null);
   const saveButtonRef=useRef<HTMLButtonElement>(null);
   const handlePaste=(e:ClipboardEvent)=>{pasteHandler(aceEditorRef,e)};
-  const uploadImageInputRef=useRef<HTMLInputElement>(null);
+  const uploadInputRef=useRef<HTMLInputElement>(null);
   const [isLight,setIsLight]=useState(true);
+  const timeDatePickerRef=useRef<HTMLInputElement>(null);
   useEffect(()=>{
     setTimeout(()=>aceEditorRef.current?.editor?.focus(),10);
     const mediaQuery=window.matchMedia("(prefers-color-scheme:light)");
@@ -262,7 +273,7 @@ function NewBBItem({item,saveHandler,pasteHandler,uploadWithTip}:{item:BB,saveHa
             onClick={()=>{
               const content=aceEditorRef.current?.editor.getValue();
               setEditing(false);
-              saveHandler(content!);
+              saveHandler(content!,new Date(timeDatePickerRef.current?.value!).valueOf()/1000);
             }}
             ref={saveButtonRef}
           />
@@ -282,7 +293,7 @@ function NewBBItem({item,saveHandler,pasteHandler,uploadWithTip}:{item:BB,saveHa
             type="file"
             accept={imageTypes.join(",")}
             style={{display:"none"}}
-            ref={uploadImageInputRef}
+            ref={uploadInputRef}
             onChange={async (e)=>{
               const file=e.target.files?.[0];
               if(!file) return;
@@ -296,7 +307,7 @@ function NewBBItem({item,saveHandler,pasteHandler,uploadWithTip}:{item:BB,saveHa
             icon={<ImageRegular/>}
             size="small"
             onClick={()=>{
-              uploadImageInputRef.current?.click();
+              uploadInputRef.current?.click();
             }}
             title="上传图片"
           />
@@ -411,7 +422,15 @@ function NewBBItem({item,saveHandler,pasteHandler,uploadWithTip}:{item:BB,saveHa
           }
         }
       />
-      <div className="times-item-time">{moment.unix(item.time).format("YYYY-MM-DD HH:mm:ss")}</div>
+      { editing? 
+        <DatePicker 
+          ref={timeDatePickerRef} 
+          onSelectDate={(date)=>{
+            setSaveEnable(!(date==new Date(item.time*1000)));
+          }}
+        />:
+      <div className="times-item-time" >{moment.unix(item.time).format("YYYY-MM-DD")}</div>
+      }
     </div>
   :<></>);
 }
@@ -500,8 +519,8 @@ export default function Page(){
         const deleteHandler=()=>{
           setDialogState({
             open:true,
-            title:"删除说说",
-            content:<>确定删除这条说说吗？<br/><strong>将会被永久删除！（真的很久！）</strong></>,
+            title:"删除站点历史",
+            content:<>确定删除这条站点历史吗？<br/><strong>将会被永久删除！（真的很久！）</strong></>,
             onConfirm:async ()=>{
               setDialogState({
                 ...dialogState,
@@ -521,8 +540,8 @@ export default function Page(){
             }
           });
         }
-        const saveHandler=async (content:string)=>{
-          if(await updateTimelines({...item,content:content})){
+        const saveHandler=async (content:string, newTime: number)=>{
+          if(await updateTimelines({...item,content:content,newTime: newTime})){
             messageBarRef.current?.addMessage("提示","保存成功","success");
             setUpdated(updated+1);
           }
@@ -556,7 +575,8 @@ export default function Page(){
           appearance="primary"
           onClick={()=>{
             const item={time:moment().unix(),content:"",plainContent:""}
-            const saveHandler=async (content:string)=>{
+            const saveHandler=async (content:string,newTime: number)=>{
+              item.time=newTime;
               if(await addTimelines({...item,content:content})){
                 messageBarRef.current?.addMessage("提示","保存成功","success");
                 setUpdated(updated+1);
@@ -568,7 +588,7 @@ export default function Page(){
             setBBContent([<NewBBItem saveHandler={saveHandler} item={item} pasteHandler={pasteHandler} uploadWithTip={uploadWithTip}/>,...bbContent])
           }}
         >
-          新说说
+          新站点历史
         </Button>
       </div>
       <div id="times-list">
