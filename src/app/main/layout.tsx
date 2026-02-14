@@ -83,11 +83,6 @@ const tabs:TabItem[]=[
     icon: <CollectionsEmptyRegular/>
   },
   {
-    name: "音乐管理",
-    link: "/main/music",
-    icon: <HeadphonesSoundWaveRegular/>
-  },
-  {
     name: "时间线",
     link: "/main/timeline",
     icon: <TimelineRegular/>
